@@ -1,0 +1,24 @@
+{% extends '@App/layout.html.twig' %}
+
+{%  block body %}
+    <div class="container">
+        {% for restresult in restresult %}
+            <div class="row">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="row-picture">
+                            <a href="{{ path('app_phonebook_id', { 'id': restresult.id }) }}"><img src="{{ asset('/assets/images/product.png') }}"></a>
+                        </div>
+                        <div class="row-content">
+                            <br>
+                            <i class="glyphicon glyphicon-user"></i> Name: {{ restresult.name }}
+                            <br>
+                            <i class="glyphicon glyphicon-phone-alt"></i> Phone: {{ restresult.phone }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}
