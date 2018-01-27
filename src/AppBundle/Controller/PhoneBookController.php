@@ -39,7 +39,19 @@ class PhoneBookController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/users/")
+     * @Rest\Get("/users/search/{name}")
+     */
+    public function searchdAction($name)
+    {
+        $singleresult = $this->getDoctrine()->getRepository(PhoneBook::class)->findBy(['name' => $name]);
+        if ($singleresult === null) {
+            return new View("user not found", Response::HTTP_NOT_FOUND);
+        }
+        return $singleresult;
+    }
+
+    /**
+     * @Rest\Post("/users")
      */
     public function postAction(Request $request)
     {
@@ -67,7 +79,7 @@ class PhoneBookController extends FOSRestController
         $name = $request->get('name');
         $phone = $request->get('phone');
         $sn = $this->getDoctrine()->getManager();
-        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+        $user = $this->getDoctrine()->getRepository(PhoneBook::class)->find($id);
         if (!$name && !$phone) {
             return new View("User name or phone cannot be empty", Response::HTTP_NOT_ACCEPTABLE);
         }
@@ -82,7 +94,7 @@ class PhoneBookController extends FOSRestController
 
         $sn->flush();
 
-        return new View("User name or phone cannot be empty", Response::HTTP_NOT_ACCEPTABLE);
+        return new View("Updated Successfully", Response::HTTP_NOT_ACCEPTABLE);
     }
 
     /**
