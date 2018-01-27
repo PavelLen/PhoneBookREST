@@ -23,8 +23,7 @@ class PhoneBookController extends FOSRestController
             return new View("there are no users exist", Response::HTTP_NOT_FOUND);
         }
 
-        //var_dump($restresult); die();
-        return $this->render('@App/Pages/allUsers.html.twig', ['restresult' => $restresult]);
+        return $restresult;
     }
 
     /**
@@ -69,26 +68,21 @@ class PhoneBookController extends FOSRestController
         $phone = $request->get('phone');
         $sn = $this->getDoctrine()->getManager();
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
-        if (empty($user)) {
-            return new View("user not found", Response::HTTP_NOT_FOUND);
+        if (!$name && !$phone) {
+            return new View("User name or phone cannot be empty", Response::HTTP_NOT_ACCEPTABLE);
         }
-        elseif(!empty($name) && !empty($phone)){
+
+        if ($name) {
             $user->setName($name);
-            $user->setRole($phone);
-            $sn->flush();
-            return new View("User Updated Successfully", Response::HTTP_OK);
         }
-        elseif(empty($name) && !empty($phone)){
-            $user->setRole($phone);
-            $sn->flush();
-            return new View("phone Updated Successfully", Response::HTTP_OK);
+
+        if ($phone) {
+            $user->setPhone($phone);
         }
-        elseif(!empty($name) && empty($phone)){
-            $user->setName($name);
-            $sn->flush();
-            return new View("User Name Updated Successfully", Response::HTTP_OK);
-        }
-        else return new View("User name or phone cannot be empty", Response::HTTP_NOT_ACCEPTABLE);
+
+        $sn->flush();
+
+        return new View("User name or phone cannot be empty", Response::HTTP_NOT_ACCEPTABLE);
     }
 
     /**
@@ -98,7 +92,7 @@ class PhoneBookController extends FOSRestController
     {
         $data = new PhoneBook();
         $sn = $this->getDoctrine()->getManager();
-        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+        $user = $this->getDoctrine()->getRepository(PhoneBook::class)->find($id);
         if (empty($user)) {
             return new View("user not found", Response::HTTP_NOT_FOUND);
         }
