@@ -38,27 +38,6 @@ class PhoneBook
      */
     private $phone;
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('name', new NotBlank(array(
-            'message' => 'Поле "Имя" не должно быть пустым!'
-        )));
-
-        $metadata->addPropertyConstraints('phone', [
-            new Length(array(
-                'max'        => 12,
-                'maxMessage' => 'Не корретно заполнено поле "phone"! Максимальное количество символов {{ limit }}'
-            )),
-            new Length(array(
-                'min'        => 12,
-                'maxMessage' => 'Не корретно заполнено поле "phone"! Минимальное количество символов {{ limit }}'
-            )),
-            new NotBlank(array(
-                'message' => 'Поле "phone" не должно быть пустым!'
-            ))
-        ]);
-    }
-
     /**
      * Get id
      *
